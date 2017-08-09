@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,16 +21,16 @@ namespace FirstBank.Model
             return i--;
         }
 
-        public bool LessThanOrEqual(int a, int b)
+        public bool Greater(int a, int b)
         {
-            if (a <= b) return true;
+            if (a > b) return true;
             return false;
         }
 
-        public bool GreaterThanOrEqual(int a, int b)
+        public int Lower(int a, int b, int c)
         {
-            if (a >= b) return true;
-            return false;
+            if (a < b) return 1;
+            else return 0;
         }
 
         public int ReplaceZeroWith257()
