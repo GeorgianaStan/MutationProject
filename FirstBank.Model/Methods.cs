@@ -39,6 +39,19 @@
 
         }
 
+        public void ReplaceStringGeorgianaToAnotherString()
+        {
+            var stringName = "Georgiana";
+            var abc = "ABAC";
+        }
+
+        public void ReplaceStringToBool()
+        {
+            var stringName = "Georgiana";
+            int i = 12;
+            float f = 15.65F;
+            double d = 56.66D;
+        }
     }
 }
 

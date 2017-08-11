@@ -34,37 +34,50 @@ namespace MutantPower
                     {
                         if (instruction.OpCode == OpCodes.Brtrue_S)
                             instruction.OpCode = OpCodes.Brfalse_S;
-
-                        else if (instruction.OpCode == OpCodes.Brfalse_S)
-                            instruction.OpCode = OpCodes.Brtrue_S;
                         break;
                     }
                 case "false":
                     {
                         if (instruction.OpCode == OpCodes.Brfalse_S)
                             instruction.OpCode = OpCodes.Brtrue_S;
-
-                        else if (instruction.OpCode == OpCodes.Brtrue_S)
-                            instruction.OpCode = OpCodes.Brfalse_S;
                         break;
                     }
                 case "zerowith257":
-                {
-                    if (instruction.OpCode == OpCodes.Ldc_I4_0 && instruction.Operand == null)
                     {
-                        instruction.OpCode = OpCodes.Ldc_I4;
-                        instruction.Operand =0X101;
-                    }
-                    break;
+                        if (instruction.OpCode == OpCodes.Ldc_I4_0 && instruction.Operand == null)
+                        {
+                            instruction.OpCode = OpCodes.Ldc_I4;
+                            instruction.Operand = 0X101;
+                        }
+                        break;
                     }
                 case "Replace257WithZero":
-                {
-                    if (instruction.OpCode == OpCodes.Ldc_I4 && (Int32)instruction.Operand == 257)
                     {
-                        instruction.Operand = 0;
-                    }
+                        if (instruction.OpCode == OpCodes.Ldc_I4 && (Int32)instruction.Operand == 257)
+                        {
+                            instruction.Operand = 0;
+                        }
 
                         break;
+                    }
+                case "ReplaceStringGeorgianaToAnotherString":
+                    {
+                        if (instruction.OpCode == OpCodes.Ldstr && instruction.Operand.ToString() == "Georgiana")
+                        {
+                            instruction.Operand = "Another";
+                        }
+                        break;
+                    }
+
+                case "ReplaceStringToBool":
+                {
+                    if (instruction.OpCode == OpCodes.Ldstr)
+                    {
+                        instruction.OpCode = (instruction.Operand.ToString() == "Georgiana")
+                            ? OpCodes.Ldc_I4_1
+                            : OpCodes.Ldc_I4_0; 
+                    }
+                    break;
                 }
                 default:
                     {
@@ -83,7 +96,7 @@ namespace MutantPower
                 MethodDefinition methodDef = typeDefinition.Methods.Where(m => m.Name == method).Select(m => m).SingleOrDefault();
                 if (methodDef != null)
 
-                
+
                     foreach (var instruction in methodDef.Body.Instructions)
                     {
                         MutationOperation(methodDef, instruction, operation);
