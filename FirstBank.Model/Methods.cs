@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FirstBank.Model
+﻿namespace FirstBank.Model
 {
     public class Methods
     {
@@ -35,8 +26,17 @@ namespace FirstBank.Model
 
         public int ReplaceZeroWith257()
         {
-            var zero = 0;
-            return zero + 5;
+            int zero = 0;
+            int georgi = 0;
+            return zero + georgi;
+
+        }
+
+        public int Replace257WithZero()
+        {
+            int zero = 257;
+            return zero;
+
         }
 
     }

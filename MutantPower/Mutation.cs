@@ -1,18 +1,14 @@
 ﻿using Mono.Cecil.Cil;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using Mono.Cecil;
 
 namespace MutantPower
 {
     public static class Mutation
     {
-        public static void MutationOperation(Instruction instruction, string operation)
+        public static void MutationOperation(MethodDefinition method, Instruction instruction, string operation)
         {
             switch (operation)
             {
@@ -44,13 +40,31 @@ namespace MutantPower
                         break;
                     }
                 case "false":
-                {
-                    if (instruction.OpCode == OpCodes.Brfalse_S)
-                        instruction.OpCode = OpCodes.Brtrue_S;
+                    {
+                        if (instruction.OpCode == OpCodes.Brfalse_S)
+                            instruction.OpCode = OpCodes.Brtrue_S;
 
-                    else if (instruction.OpCode == OpCodes.Brtrue_S)
-                        instruction.OpCode = OpCodes.Brfalse_S;
+                        else if (instruction.OpCode == OpCodes.Brtrue_S)
+                            instruction.OpCode = OpCodes.Brfalse_S;
+                        break;
+                    }
+                case "zerowith257":
+                {
+                    if (instruction.OpCode == OpCodes.Ldc_I4_0 && instruction.Operand == null)
+                    {
+                        instruction.OpCode = OpCodes.Ldc_I4;
+                        instruction.Operand =0X101;
+                    }
                     break;
+                    }
+                case "Replace257WithZero":
+                {
+                    if (instruction.OpCode == OpCodes.Ldc_I4 && (Int32)instruction.Operand == 257)
+                    {
+                        instruction.Operand = 0;
+                    }
+
+                        break;
                 }
                 default:
                     {
@@ -68,9 +82,11 @@ namespace MutantPower
 
                 MethodDefinition methodDef = typeDefinition.Methods.Where(m => m.Name == method).Select(m => m).SingleOrDefault();
                 if (methodDef != null)
+
+                
                     foreach (var instruction in methodDef.Body.Instructions)
                     {
-                        MutationOperation(instruction, operation);
+                        MutationOperation(methodDef, instruction, operation);
                     }
             }
         }
@@ -101,7 +117,7 @@ namespace MutantPower
             var path = Path.GetDirectoryName(inputAssembly);
 
             var module = ModuleDefinition.ReadModule(inputAssembly);
-           
+
             MutateInstructionForMethod(module, method, operation);
             WriteMutatedDllToDisk(module, inputAssembly, method, path);
         }
